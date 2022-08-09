@@ -1,0 +1,31 @@
+name: docsify-resources-update
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: update resources
+        run: |
+          wget -O docs/resources/vue.css https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css
+          wget -O docs/resources/docsify.min.js https://cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js
+          wget -O docs/resources/search.min.js https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js
+          wget -O docs/resources/docsify-copy-code.min.js https://unpkg.com/docsify-copy-code@2
+          wget -O docs/resources/countable.min.js https://cdn.jsdelivr.net/npm/docsify-count@latest/dist/countable.min.js
+          wget -O docs/resources/docsify-tabs@1.js https://cdn.jsdelivr.net/npm/docsify-tabs@1
+          wget -O docs/resources/docsify-edit-on-github.js https://cdn.jsdelivr.net/npm/docsify-edit-on-github
+
+      - name: git commit & push
+        run: |
+          git config user.name "sayHii"
+          git config user.email "sayHii@live.com"
+          git add -A
+          git commit -m "update" || true
+          git push origin main
